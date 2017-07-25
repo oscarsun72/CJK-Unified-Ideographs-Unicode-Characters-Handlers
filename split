@@ -1,0 +1,46 @@
+'例如：「多麗（綠頭鴨、鴨頭綠）」=>此一字串可以分出「多麗」,「綠頭鴨」,「鴨頭綠」三個字串）
+'又如:「x（x1、x2、x3、……）」可析離出「x」「x1」「x2」「x3」……
+
+Private Sub List2_AfterUpdate() 'List2=詞牌名清單
+Dim x As String, xList2() As String, i As Integer'x : 原字串、xList2: 新字串
+x = List2.Value
+List2.Enabled = False
+
+If x Like "*[（、]*" Then '多麗（綠頭鴨、鴨頭綠）
+    If InStr(x, "、") > 0 Then ' 有頓號
+        i = 1
+        ReDim Preserve xList2(i)
+        xList2(0) = Mid(x, 1, InStr(x, "（") - 1)
+        xList2(1) = Mid(x, InStr(x, "（") + 1, InStr(x, "、") - InStr(x, "（") - 1)
+        Do Until InStr(x, "、") = 0
+            i = i + 1
+            ReDim Preserve xList2(i)
+            x = Mid(x, InStr(x, "、") + 1)
+            If InStr(x, "、") = 0 Then
+                x = Replace(x, "）", "")
+                xList2(i) = x
+            Else
+                xList2(i) = Mid(x, 1, InStr(x, "、") - 1)
+            End If
+        Loop
+        
+    Else
+        ReDim xList2(1)
+        If InStr(x, "）") > 0 Then '只有（）
+            x = Mid(x, InStr(x, "（") + 1, Len(x) - InStr(x, "（") - 1)
+            xList2(1) = x
+            xList2(0) = Replace(List2.Value, "（" & x & "）", "")
+        Else
+            xList2(0) = x
+            x = Mid(x, InStr(x, "（") + 1)
+            xList2(1) = x
+            xList2(0) = Replace(List2.Value, "（" & x, "")
+        End If
+    End If
+    qy1FieldValuesOr List2.Tag, xList2, False
+Else
+    testADO List2.Tag, x
+End If
+
+List2.Enabled = True
+End Sub
