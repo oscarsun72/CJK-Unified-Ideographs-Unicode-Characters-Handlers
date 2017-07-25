@@ -1,5 +1,6 @@
 '例如：「多麗（綠頭鴨、鴨頭綠）」=>此一字串可以分出「多麗」,「綠頭鴨」,「鴨頭綠」三個字串）
 '又如:「x（x1、x2、x3、……）」可析離出「x」「x1」「x2」「x3」……
+'C# 中有 string.Split() 可用 一樣也可以傳[]陣列 delimiter separator 引數
 
 Private Sub List2_AfterUpdate() 'List2=詞牌名清單
 Dim x As String, xList2() As String, i As Integer'x : 原字串、xList2: 新字串
